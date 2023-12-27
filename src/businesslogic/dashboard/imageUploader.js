@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import LoginIcon from "@mui/icons-material/Login";
 import { useTranslation } from "react-i18next";
 
-const ImageUploader = () => {
-  const [file, setFile] = useState(null);
+const ImageUploader = ({ file, setFile }) => {
   const { t } = useTranslation();
 
   const handleDrop = (event) => {
@@ -46,7 +45,6 @@ const ImageUploader = () => {
       try {
         // Send the file to the backend for storage
         const response = await axios.post("your_backend_endpoint", formData);
-        console.log("File uploaded successfully:", response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -56,23 +54,12 @@ const ImageUploader = () => {
   };
 
   return (
-    <div>
+    <div className="max-height-draggable">
       <div
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={handleFileClick}
-        style={{
-          border: "2px dashed #FFFFFF",
-          padding: "20px",
-          textAlign: "center",
-          cursor: "pointer",
-          width: "473px",
-          height: "504px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-        className="upload-draggable-text"
+        className="upload-draggable-text max-height-draggable"
       >
         {!file && (
           <>
@@ -85,7 +72,7 @@ const ImageUploader = () => {
             <img
               src={URL.createObjectURL(file)}
               alt="Preview"
-              style={{ maxWidth: "473px", maxHeight: "504px" }}
+              className="image-preview"
             />
           </div>
         )}

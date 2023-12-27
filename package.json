@@ -1,7 +1,6 @@
 {
   "name": "task-app",
   "version": "0.1.0",
-  "homepage": "https://ajay-Matsagar.github.io/movie-demo-fe",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -28,9 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -51,7 +48,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1",
     "sass": "^1.69.5"
   }
 }

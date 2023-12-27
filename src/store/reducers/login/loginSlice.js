@@ -1,20 +1,14 @@
-import store from "../../store/store";
-
-
-export const componentKey = 'LOGIN';
-const { actions } = store.reducerManager.add({
-    key: componentKey,
-    addedReducers: {
-        setLoadingState: (state, action) => {
-            state.loadingState = action.payload;
-        },
+import { createSlice } from "@reduxjs/toolkit";
+export const componentKey = "LOGIN";
+const loginSlice = createSlice({
+  name: componentKey,
+  initialState: { isLoading: false },
+  reducers: {
+    setLoadingState: (state, action) => {
+      state.isLoading = action.payload;
     },
-    initialReducerState: {
-        loadingState: { state: "PAGE_READY", message: '' },
-        isLogin: false
-    }
+  },
 });
 
-export const {
-    setLoadingState
-} = actions;
+export const { setLoadingState } = loginSlice.actions;
+export default loginSlice.reducer;

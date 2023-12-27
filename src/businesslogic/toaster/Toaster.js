@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleToaster } from "../../store/reducers/toaster/ToasterSaga";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const Toaster = () => {
-  const isOpen = useSelector((state) => state.toaster);
-  const { open, onClose, message, severity, anchorOrigin, autoHideDuration } =
-    isOpen || {};
+  const toaster = useSelector((state) => state.toaster);
+  const dispatch = useDispatch();
+  const {
+    open = false,
+    onclose = () => {
+      dispatch(handleToaster({ open: false }));
+    },
+    message,
+    severity,
+    anchorOrigin,
+    autoHideDuration,
+  } = toaster || {};
+
+  console.log("toaster", toaster);
 
   const getSnackbarColor = (severity) => {
     switch (severity) {
@@ -27,22 +39,24 @@ const Toaster = () => {
 
   return (
     <>
-      {isOpen && (
+      {open && (
         <Snackbar
           open={open}
           autoHideDuration={autoHideDuration || 6000}
-          onClose={onClose}
+          onClose={() => onclose && onclose()}
           anchorOrigin={
             anchorOrigin || { vertical: "top", horizontal: "right" }
           }
         >
-          <Alert
-            onClose={onClose}
-            severity={severity || "info"}
-            style={{ backgroundColor: getSnackbarColor(severity) }}
-          >
-            {message}
-          </Alert>
+          <div>
+            <Alert
+              onClose={() => onclose && onclose()}
+              severity={severity || "info"}
+              style={{ backgroundColor: getSnackbarColor(severity) }}
+            >
+              {message}
+            </Alert>
+          </div>
         </Snackbar>
       )}
     </>

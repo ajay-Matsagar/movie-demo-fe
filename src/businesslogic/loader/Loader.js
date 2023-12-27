@@ -1,10 +1,8 @@
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { useSelector } from "react-redux";
 
 function Loader() {
-  const isLoading = useSelector((state) => state.loader);
 
   return (
     <Box
@@ -15,7 +13,7 @@ function Loader() {
         height: "60vh",
       }}
     >
-      {isLoading && <CircularProgress />}
+      <CircularProgress />
     </Box>
   );
 }

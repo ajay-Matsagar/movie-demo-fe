@@ -1,28 +1,52 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from "react";
 import EmptyMovieList from "./emptyMovieList";
-import CardComponent from "./cardComponent";
 import AddNewMovie from "./addNewMovie";
+import MovieTable from "./movieTable";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMoviesList } from "../../store/moviesData/moviesSaga";
 
-export default function Dashboard() {
-  const { t } = useTranslation();
+export default function Dashboard({ screenWidth }) {
+  const dispatch = useDispatch();
+  const { moviesData = {} } = useSelector((state) => state.movies) || {};
+  const { data = [] } = moviesData || {}
 
   const [isAddNewMovie, setIsAddNewMovie] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editObject, setEditObject] = useState({});
 
-  const addMovieButtonHandle = () => {
-    setIsAddNewMovie(!isAddNewMovie);
+  useEffect(() => {
+    dispatch(fetchMoviesList());
+  }, [dispatch]);
+
+  const addMovieButtonHandle = (value) => {
+    setIsEdit(false);
+    setIsAddNewMovie(value);
+    setEditObject({});
   };
 
-  const isCount = true;
+  const handleEdit = (obj, value) => {
+    setIsEdit(value);
+    setEditObject(obj);
+  };
 
-  if (isCount && !isAddNewMovie) {
-    return <EmptyMovieList addMovieButtonHandle={addMovieButtonHandle} />;
-  }
-  if (isAddNewMovie) {
-    return <AddNewMovie />;
-  }
-  if (!isCount) {
-    return <CardComponent />;
-  }
-  return "";
+  return isEdit ? (
+    <AddNewMovie
+      isEdit={isEdit}
+      addMovieButtonHandle={addMovieButtonHandle}
+      editObject={editObject}
+      screenWidth={screenWidth}
+    />
+  ) : data?.length === 0 && !isAddNewMovie ? (
+    <EmptyMovieList addMovieButtonHandle={addMovieButtonHandle} />
+  ) : isAddNewMovie ? (
+    <AddNewMovie addMovieButtonHandle={addMovieButtonHandle} screenWidth={screenWidth} />
+  ) : data?.length > 0 ? (
+    <MovieTable
+      addMovieButtonHandle={addMovieButtonHandle}
+      handleEdit={handleEdit}
+      screenWidth={screenWidth}
+    />
+  ) : (
+    ""
+  );
 }

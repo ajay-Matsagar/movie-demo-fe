@@ -5,15 +5,15 @@ export const toasterKey = "TOASTER";
 const toasterSlice = createSlice({
   name: toasterKey,
   initialState: {
-    isOpen: false,
+    open: false,
     message: "",
     severity: "info",
     anchorOrigin: { vertical: "top", horizontal: "right" },
-    autoHideDuration: 6000,
+    autoHideDuration: 4000,
   },
   reducers: {
     setToaster: (state, action) => {
-      state.isOpen = action.payload.isOpen;
+      state.open = action.payload.open;
       state.message = action.payload.message || "";
       state.severity = action.payload.severity || "info";
       state.anchorOrigin = action.payload.anchorOrigin || {

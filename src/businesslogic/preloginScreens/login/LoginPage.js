@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Registration from "../../../components/registrationform/Registration";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { startLoadingProcess } from "../../../store/reducers/loader/LoderSaga";
-import { showToaster } from "../../../store/reducers/toaster/ToasterSaga";
 import {
   Button,
   Checkbox,
@@ -15,18 +11,44 @@ import {
   Typography,
 } from "@mui/material";
 import { regexPatterns } from "../../RegexValidation/RegexPatterns";
+import { useNavigate } from "react-router-dom";
+import { postLoginUserWithCredentials } from "../../../store/reducers/login/loginSaga";
+import { stopLoadingProcess } from "../../../store/reducers/loader/LoderSaga";
 
 function LoginPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    dispatch(stopLoadingProcess());
+  }, [dispatch]);
 
   const handleEmailChange = (e, fieldName) => {
     const newEmail = e.target.value;
     fieldName(newEmail);
+    setIsError(false);
+  };
 
-    // setUserName(validateEmail(newEmail));
+  const handleSubmit = () => {
+    if (!userName || !password) {
+      setIsError(true);
+      return null;
+    }
+    dispatch(
+      postLoginUserWithCredentials({
+        navigate: navigate,
+        isLoading: true,
+        loginCreds: { email: userName, password: password },
+      })
+    );
+    // setTimeout(() => {
+    //   dispatch(postLoginUserWithCredentials({ navigate: navigate, isLoading: false, isLoad: true }));
+    // }, 10000);
   };
 
   return (
@@ -49,12 +71,14 @@ function LoginPage() {
             className="normal-text"
             onChange={(e) => handleEmailChange(e, setUserName)}
             value={userName}
-            // error={!regexPatterns.email.test(userName) || false}
-            // helperText={!isValidEmail ? t("Invalid_email_address") : ""}
-            // sx={{ minWidth: styleProps.minWidth }}
-            // {...(fieldProps && fieldProps.email ? fieldProps.email : {})}
+            inputProps={{ autoComplete: 'new-password' }}
           />
-          {userName && !regexPatterns.email.test(userName) && <FormHelperText>{t("Invalid_email_address")}</FormHelperText>}
+          {((userName && !regexPatterns.email.test(userName)) ||
+            (isError && !userName)) && (
+            <FormHelperText className="error-message">
+              {t("invalid_email_address")}
+            </FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6} paddingTop={"20px"}>
           <OutlinedInput
@@ -67,12 +91,15 @@ function LoginPage() {
             placeholder={t("password")}
             className="normal-text"
             onChange={(e) => handleEmailChange(e, setPassword)}
-            // value={password}
-            // error={!isStrongPassword}
-            // helperText={getPasswordStrengthMessage()}
-            // {...(fieldProps && fieldProps.password ? fieldProps.password : {})}
+            value={password}
+            inputProps={{ autoComplete: "new-password" }}
           />
-          {password && !regexPatterns.passCode.test(password) && <FormHelperText>{t("password_must-be_strong")}</FormHelperText>}
+          {((password && !regexPatterns.passCode.test(password)) ||
+            (isError && !password)) && (
+            <FormHelperText className="error-message">
+              {t("password_must-be_strong")}
+            </FormHelperText>
+          )}
         </Grid>
         <Grid item xs={12} className="d-flex">
           <FormControlLabel
@@ -80,9 +107,7 @@ function LoginPage() {
               <Checkbox
                 value="allowExtraEmails"
                 color="primary"
-                className="d-flex"
-                // onChange={onCheckboxChange}
-                // checked={allowExtraEmails}
+                className="d-flex paddin-top-24px"
               />
             }
             label={
@@ -90,7 +115,6 @@ function LoginPage() {
                 variant="body2"
                 color="text.secondary"
                 className="d-flex remember-me"
-                // {...(labelProps && labelProps.receiveUpdates)}
               >
                 {t("Remember_me")}
               </Typography>
@@ -99,10 +123,9 @@ function LoginPage() {
         </Grid>
         <Button
           variant="contained"
-          className="login-button"
+          className="login-button paddin-top-24px"
           sx={{ mb: 1, p: 1.5 }}
-          // onClick={handleSubmit}
-          // {...(buttonProps?.btntxt && buttonProps.btntxt)}
+          onClick={handleSubmit}
         >
           {t("Log_in_link")}
         </Button>

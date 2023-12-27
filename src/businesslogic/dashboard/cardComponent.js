@@ -3,83 +3,111 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import vectorImage1 from "../../images/Vectors.png";
-import { GridMoreVertIcon } from "@mui/x-data-grid";
+import { GridDeleteForeverIcon, GridMoreVertIcon } from "@mui/x-data-grid";
+import { useTranslation } from "react-i18next";
+import DeleteDataPopup from "../../components/DeleteDataPopup";
+import { useDispatch } from "react-redux";
+import { deleteMovie } from "../../store/moviesData/moviesSaga";
 
-export default function CardComponent() {
-  const [anchorEl, setAnchorEl] = useState(false);
-  const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
+export default function CardComponent({ name, year, poster, handleEdit, id }) {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isDelete, setIsDelete] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({});
+
   const handleClose = (e) => {
-    const { clientX, clientY } = e;
-    setAnchorEl(!anchorEl);
-    setCardPosition({
-        top: clientY + window.scrollY,
-        left: clientX + window.scrollX,
-      });
+    setAnchorEl(e.currentTarget);
   };
-  const handleOptionClick = () => {};
+  const handleOptionClick = (name, year, poster, id, isEdit) => {
+    setAnchorEl(null);
+    if (isEdit) {
+      handleEdit({ name: name, year: year, poster: poster, id: id }, true);
+    } else {
+      setSelectedItem({ name: name, year: year, poster: poster, id: id });
+      setIsDelete(!isDelete);
+    }
+  };
+
+  const deleteHandler = () => {
+    dispatch(deleteMovie(selectedItem));
+    setIsDelete(!isDelete);
+  };
+
+  const arrayBufferView = new Uint8Array(poster?.data);
+  const blob = new Blob([arrayBufferView], { type: "image/jpg" }); // Adjust the image type if needed
+  const imageUrl = URL.createObjectURL(blob);
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      {/* <CardHeader
-        avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-            </Avatar>
-        }
-        action={
-            <IconButton aria-label="settings">
-            <MoreVertIcon />
-            </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-        /> */}
+    <Card className="card-element">
       <CardMedia
         component="img"
         height="194"
-        image={vectorImage1}
-        alt="Paella dish"
+        poster={imageUrl}
+        alt="image"
       />
       <CardContent>
-        <div>
-          <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
-          </Typography>
-        </div>
-        <div>
-          <IconButton aria-label="settings">
-            <GridMoreVertIcon onClick={handleClose} />
-          </IconButton>
-          <div
-            sx={{
-              top: cardPosition.top,
-              left: cardPosition.left,
-              zIndex: 1000,
-            }}
-          >
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <Tooltip title={name} arrow>
+              <Typography className="card-movie-title text-overflow-ellipses">
+                {name || ""}
+              </Typography>
+            </Tooltip>
+            <Tooltip title={year} arrow>
+              <Typography className="card-movie-year text-overflow-ellipses">
+                {year || ""}
+              </Typography>
+            </Tooltip>
+          </Grid>
+          <Grid item xs={2}>
+            <IconButton
+              aria-label="settings"
+              className="white-color"
+              onClick={handleClose}
             >
-              <MenuItem onClick={() => handleOptionClick("Option 1")}>
-                Option 1
-              </MenuItem>
-              <MenuItem onClick={() => handleOptionClick("Option 2")}>
-                Option 2
-              </MenuItem>
-              {/* Add more MenuItems as needed */}
-            </Menu>
-          </div>
-        </div>
+              <GridMoreVertIcon />
+            </IconButton>
+            <div>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                // onClose={handleClose}
+              >
+                <MenuItem
+                  onClick={() =>
+                    handleOptionClick(name, year, poster, id, true)
+                  }
+                >
+                  {t("edit")}
+                </MenuItem>
+                <MenuItem
+                  onClick={() => handleOptionClick(name, year, poster, id)}
+                >
+                  {t("delete")}
+                </MenuItem>
+              </Menu>
+            </div>
+          </Grid>
+        </Grid>
       </CardContent>
+      <DeleteDataPopup
+        open={isDelete}
+        icon={<GridDeleteForeverIcon />}
+        alertMessage={t("alert_message")}
+        okButton={t("delete")}
+        cancelButton={t("cancel")}
+        onClickCancel={() => setIsDelete(!isDelete)}
+        onClickOk={deleteHandler}
+      />
     </Card>
   );
 }

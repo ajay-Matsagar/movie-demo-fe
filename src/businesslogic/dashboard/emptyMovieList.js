@@ -7,12 +7,12 @@ export default function EmptyMovieList({ addMovieButtonHandle }) {
 
   return (
     <>
-      <h1 className="white-color login-head">{t("empty_movie_list")}</h1>
+      <h1 className="white-color empty-list-title">{t("empty_movie_list")}</h1>
       <Button
         variant="contained"
         className="login-button"
         sx={{ mb: 1, p: 1.5 }}
-        onClick={addMovieButtonHandle}
+        onClick={() => addMovieButtonHandle(true)}
         // {...(buttonProps?.btntxt && buttonProps.btntxt)}
       >
         {t("add_new_movie")}

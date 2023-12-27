@@ -27,7 +27,7 @@ function* handleLoadingProcess(action) {
 
 function* handleStopLoadingProcess(action) {
   try {
-    yield put(setLoading(action?.payload));
+    yield put(setLoading({isLoading: false}));
   } catch (error) {
     console.error("Error in handleLoadingProcess saga:", error);
   }
