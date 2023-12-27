@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,9 +21,7 @@ const Toaster = () => {
     anchorOrigin,
     autoHideDuration,
   } = toaster || {};
-
-  console.log("toaster", toaster);
-
+  
   const getSnackbarColor = (severity) => {
     switch (severity) {
       case "success":

@@ -46,9 +46,6 @@ function LoginPage() {
         loginCreds: { email: userName, password: password },
       })
     );
-    // setTimeout(() => {
-    //   dispatch(postLoginUserWithCredentials({ navigate: navigate, isLoading: false, isLoad: true }));
-    // }, 10000);
   };
 
   return (
@@ -68,10 +65,15 @@ function LoginPage() {
             name={t("email")}
             autoComplete="email"
             placeholder={t("email")}
-            className="normal-text"
+            className={`${
+              (userName && !regexPatterns.email.test(userName)) ||
+              (isError && !userName)
+                ? "error-input"
+                : ""
+            } normal-text`}
             onChange={(e) => handleEmailChange(e, setUserName)}
             value={userName}
-            inputProps={{ autoComplete: 'new-password' }}
+            inputProps={{ autoComplete: "new-password" }}
           />
           {((userName && !regexPatterns.email.test(userName)) ||
             (isError && !userName)) && (
@@ -89,7 +91,12 @@ function LoginPage() {
             id="password"
             autoComplete="new-password"
             placeholder={t("password")}
-            className="normal-text"
+            className={`${
+              (password && !regexPatterns.passCode.test(password)) ||
+              (isError && !password)
+                ? "error-input"
+                : ""
+            } normal-text`}
             onChange={(e) => handleEmailChange(e, setPassword)}
             value={password}
             inputProps={{ autoComplete: "new-password" }}

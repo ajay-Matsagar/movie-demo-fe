@@ -15,39 +15,42 @@ export default function AddNewMovie({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(editObject?.preview || null);
 
   const [obj, setObje] = useState({
-    ...(editObject || { name: "", year: "", image: "" }),
+    ...(editObject || { title: "", publishingYear: "", poster: null }),
   });
 
   const [isError, setIsError] = useState(false);
 
   const handleSubmit = () => {
-    if (!obj?.name || !obj?.year) {
+    if (
+      !obj?.title ||
+      !obj?.publishingYear ||
+      !regexPatterns.text.test(obj?.title) ||
+      !regexPatterns.number.test(obj?.publishingYear)
+    ) {
       setIsError(true);
     } else {
       if (isEdit) {
         dispatch(
           editMovie({
             body: {
-              title: obj?.name,
-              poster: obj?.image,
-              publishingYear: obj?.year,
+              title: obj?.title,
+              poster: file || obj?.poster,
+              publishingYear: obj?.publishingYear,
             },
             id: obj?.id,
             addMovieButtonHandle: addMovieButtonHandle,
           })
         );
       } else {
-        // const formData = new FormData();
-        // formData.append("image", file);
         dispatch(
           addMovie({
             body: {
-              title: obj?.name,
+              title: obj?.title,
               poster: file,
-              publishingYear: obj?.year,
+              publishingYear: obj?.publishingYear,
             },
             addMovieButtonHandle: addMovieButtonHandle,
           })
@@ -67,7 +70,7 @@ export default function AddNewMovie({
         {t("create_a_new_movie")}
       </h1>
       <div className="d-flex div-padding below-width-div">
-        <ImageUploader file={file} setFile={setFile} />
+        <ImageUploader file={file} setFile={setFile} isEdit={isEdit} />
         <div className="width-100 padding-left-120 padding-none-mobile-device">
           <Grid container flexDirection={"column"} alignItems={"flex-start"}>
             <Grid
@@ -87,11 +90,11 @@ export default function AddNewMovie({
                 autoComplete="title"
                 placeholder={t("title")}
                 className="normal-text title-text-input"
-                onChange={(e) => onChangeHandler(e, "name")}
-                value={obj?.name}
+                onChange={(e) => onChangeHandler(e, "title")}
+                value={obj?.title}
               />
-              {((obj?.name && !regexPatterns.text.test(obj?.name)) ||
-                (isError && !obj?.name)) && (
+              {((obj?.title && !regexPatterns.text.test(obj?.title)) ||
+                (isError && !obj?.title)) && (
                 <FormHelperText className="error-message">
                   {t("text_input")}
                 </FormHelperText>
@@ -115,11 +118,12 @@ export default function AddNewMovie({
                 autoComplete="publishing_year"
                 placeholder={t("publishing_year")}
                 className="normal-text publishing-year-input"
-                onChange={(e) => onChangeHandler(e, "year")}
-                value={obj?.year}
+                onChange={(e) => onChangeHandler(e, "publishingYear")}
+                value={obj?.publishingYear}
               />
-              {((obj?.year && !regexPatterns.number.test(obj?.year)) ||
-                (isError && !obj?.year)) && (
+              {((obj?.publishingYear &&
+                !regexPatterns.number.test(obj?.publishingYear)) ||
+                (isError && !obj?.publishingYear)) && (
                 <FormHelperText className="error-message">
                   {t("year_number")}
                 </FormHelperText>
@@ -161,7 +165,7 @@ export default function AddNewMovie({
               variant="contained"
               className="cancel-button"
               sx={{ mb: 1, p: 1.5 }}
-              onClick={addMovieButtonHandle}
+              onClick={() => addMovieButtonHandle(false)}
             >
               {t("cancel")}
             </Button>

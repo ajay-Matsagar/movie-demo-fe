@@ -16,7 +16,7 @@ import DeleteDataPopup from "../../components/DeleteDataPopup";
 import { useDispatch } from "react-redux";
 import { deleteMovie } from "../../store/moviesData/moviesSaga";
 
-export default function CardComponent({ name, year, poster, handleEdit, id }) {
+export default function CardComponent({ name, year, poster, handleEdit, id, item }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -27,12 +27,12 @@ export default function CardComponent({ name, year, poster, handleEdit, id }) {
   const handleClose = (e) => {
     setAnchorEl(e.currentTarget);
   };
-  const handleOptionClick = (name, year, poster, id, isEdit) => {
+  const handleOptionClick = (item, isEdit) => {
     setAnchorEl(null);
     if (isEdit) {
-      handleEdit({ name: name, year: year, poster: poster, id: id }, true);
+      handleEdit(item, true);
     } else {
-      setSelectedItem({ name: name, year: year, poster: poster, id: id });
+      setSelectedItem(item);
       setIsDelete(!isDelete);
     }
   };
@@ -42,16 +42,14 @@ export default function CardComponent({ name, year, poster, handleEdit, id }) {
     setIsDelete(!isDelete);
   };
 
-  const arrayBufferView = new Uint8Array(poster?.data);
-  const blob = new Blob([arrayBufferView], { type: "image/jpg" }); // Adjust the image type if needed
-  const imageUrl = URL.createObjectURL(blob);
 
   return (
-    <Card className="card-element">
-      <CardMedia
+      
+     <Card className="card-element">
+    <CardMedia
         component="img"
         height="194"
-        poster={imageUrl}
+        image={`data:image/png;base64,${poster}`}
         alt="image"
       />
       <CardContent>
@@ -80,17 +78,16 @@ export default function CardComponent({ name, year, poster, handleEdit, id }) {
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
-                // onClose={handleClose}
               >
                 <MenuItem
                   onClick={() =>
-                    handleOptionClick(name, year, poster, id, true)
+                    handleOptionClick(item, true)
                   }
                 >
                   {t("edit")}
                 </MenuItem>
                 <MenuItem
-                  onClick={() => handleOptionClick(name, year, poster, id)}
+                  onClick={() => handleOptionClick(item)}
                 >
                   {t("delete")}
                 </MenuItem>
@@ -107,7 +104,7 @@ export default function CardComponent({ name, year, poster, handleEdit, id }) {
         cancelButton={t("cancel")}
         onClickCancel={() => setIsDelete(!isDelete)}
         onClickOk={deleteHandler}
-      />
+      /> 
     </Card>
   );
 }

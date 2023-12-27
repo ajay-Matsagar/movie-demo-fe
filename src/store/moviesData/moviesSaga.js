@@ -3,6 +3,7 @@ import { setMovies } from "./moviesSlice";
 import { setLoading } from "../reducers/loader/LoaderSlice";
 import MoviesService from "../../services/MoviesDataService";
 import { setToaster } from "../reducers/toaster/ToasterSlice";
+import { makeImagePreview, makeImagePreviewReplica } from "./utils";
 
 export const { fetchMoviesList, addMovie, deleteMovie, editMovie } = {
   fetchMoviesList: (payload) => {
@@ -42,7 +43,9 @@ function* handleFetchMovies(action) {
     );
     yield put(setLoading({ isLoading: false }));
 
-    yield put(setMovies(response.data));
+    const tempResp = makeImagePreview(response.data);
+    const tempReplica = makeImagePreviewReplica(tempResp);
+    yield put(setMovies(tempReplica));
   } catch (error) {
     yield put(
       setToaster({

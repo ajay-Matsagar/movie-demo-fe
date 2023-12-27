@@ -11,6 +11,30 @@ html, body {
   overflow: hidden;
 }
 
+.btn-text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 24px !important;
+  letter-spacing: 0em !important;
+}
+
+.font-medium {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 48px !important;
+  font-weight: 600 !important;
+  line-height: 56px !important;
+  letter-spacing: 0em !important;
+}
+
+.font-small {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  letter-spacing: 0em !important;
+}
+
 .card-color {
   background: $card-color;
 }
@@ -46,11 +70,7 @@ html, body {
 }
 
 .empty-list-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 48px;
-  font-weight: 600;
-  line-height: 56px;
-  letter-spacing: 0em;
+  @extend .font-medium;
   text-align: center;
   padding-top: 280px;
 }
@@ -81,57 +101,41 @@ input {
 }
 
 .remember-me {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
+  @extend .font-small;
   text-align: center !important;
   color: $white-color;
   padding-top: 10px !important;
 }
 
 .login-button {
+  @extend .btn-text;
   width: 328px; 
   padding: 10px;
   border-radius: 10px !important;
   color: $white-color;
   background-color: $primary-color;
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
   text-align: center !important;
 
 }
 
 .cancel-button {
+  @extend .btn-text;
   width: 167px !important; 
   padding: 10px !important;
   border-radius: 10px !important;
   color: $white-color;
   background-color: transparent !important;
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
   text-align: center !important;
   border: 1px solid !important;
 }
 
 .submit-button {
+  @extend .btn-text;
   width: 179px !important; 
   padding: 10px !important;
   border-radius: 10px !important;
   color: $white-color;
   background-color: $primary-color;
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
   text-align: center !important;
 }
 
@@ -149,11 +153,7 @@ input {
 }
 
 .empty-movie-list {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 48px !important;
-  font-weight: 600 !important;
-  line-height: 56px !important;
-  letter-spacing: 0em !important;
+  @extend .font-medium;
   text-align: center !important;
 }
 
@@ -162,11 +162,7 @@ input {
 }
 
 .create-new-movie {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 48px !important;
-  font-weight: 600 !important;
-  line-height: 56px !important;
-  letter-spacing: 0em !important;
+  @extend .font-medium;
   text-align: left !important;
 }
 
@@ -184,11 +180,7 @@ input {
 }
 
 .upload-draggable-text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
+  @extend .font-small;
   border: 2px dashed $white-color;
   padding: 20px;
   text-align: center;
@@ -247,20 +239,12 @@ input {
 }
 
 .my-movies-title {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 48px !important;
-  font-weight: 600 !important;
-  line-height: 56px !important;
-  letter-spacing: 0em !important;
+  @extend .font-medium;
   text-align: start;
 }
 
 .logout-text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
+  @extend .btn-text;
   align-self: center !important;
   color: $white-color;
 }
@@ -302,11 +286,7 @@ input {
 }
 
 .card-movie-year {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  line-height: 24px !important;
-  letter-spacing: 0em !important;
+  @extend .font-small;
   text-align: left !important;
   color: $white-color;
 }
@@ -392,23 +372,11 @@ input {
   padding-bottom: 24px !important;
 }
 
-// .MuiOutlinedInput-root {
-//   &.Mui-focused .MuiOutlinedInput-notchedOutline {
-//     border-color: $success-color; // Border color on focus
-//   }
-
-//   &:hover .MuiOutlinedInput-notchedOutline {
-//     border-color: $secondary-color; // Border color on hover
-//   }
-
-//   &.Mui-error .MuiOutlinedInput-notchedOutline {
-//     border-color: $error-color; // Border color on error
-//   }
-
-//   .MuiOutlinedInput-notchedOutline {
-//     border-color: $primary-color; // Default border color
-//   }
-// }
+.error-input {
+  .MuiOutlinedInput-input {
+    border: 2px solid $error-color; // Default border color
+  }
+}
 
 @media screen and (max-width: 1023px) {
   .below-width-div {

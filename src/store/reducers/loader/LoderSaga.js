@@ -18,7 +18,6 @@ export const { startLoadingProcess, stopLoadingProcess } = {
 
 function* handleLoadingProcess(action) {
   try {
-    console.log("handleLoadingProcess == ", action);
     yield put(setLoading(action?.payload));
   } catch (error) {
     console.error("Error in handleLoadingProcess saga:", error);

@@ -18,10 +18,15 @@ export default class MoviesService {
   }
 
   static async updateMovieDetails(movieId, body, token) {
-    return await AppDataService.patch(
+    const formData = new FormData();
+
+    formData.append("title", body?.title);
+    formData.append("publishingYear", body?.publishingYear);
+    formData.append("poster", body?.poster);
+    return await AppDataService.put(
       `movie/${movieId}`,
-      body,
-      customHeaders(token)
+      formData,
+      customHeadersForFile(token)
     );
   }
 
@@ -32,11 +37,10 @@ export default class MoviesService {
     formData.append("publishingYear", body?.publishingYear);
     formData.append("poster", body?.poster);
 
-    console.info("file ---- ", body, formData);
-    for(var pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
-
-    return await AppDataService.post(`movie`, formData, customHeadersForFile(token));
+    return await AppDataService.post(
+      `movie`,
+      formData,
+      customHeadersForFile(token)
+    );
   }
 }

@@ -48,6 +48,8 @@ function MovieTable({ addMovieButtonHandle, handleEdit, screenWidth }) {
               name={item?.title}
               year={item?.publishingYear}
               handleEdit={handleEdit}
+              poster={item?.preview}
+              item={item}
             />
           </Grid>
         ))}

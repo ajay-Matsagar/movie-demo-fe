@@ -13,7 +13,6 @@ export default function EmptyMovieList({ addMovieButtonHandle }) {
         className="login-button"
         sx={{ mb: 1, p: 1.5 }}
         onClick={() => addMovieButtonHandle(true)}
-        // {...(buttonProps?.btntxt && buttonProps.btntxt)}
       >
         {t("add_new_movie")}
       </Button>

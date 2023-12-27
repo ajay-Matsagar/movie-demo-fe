@@ -32,6 +32,10 @@ function Home() {
               path="/login"
               element={<LoginPage screenWidth={screenWidth} />}
             />
+            <Route
+              path="/"
+              element={<LoginPage screenWidth={screenWidth} />}
+            />
 
             <Route
               path="/dashboard"
