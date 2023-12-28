@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import ChangeLang from "../businesslogic/switchLanguages/ChangeLang";
 import LoginPage from "../businesslogic/preloginScreens/login/LoginPage";
 import Dashboard from "../businesslogic/dashboard/index";
@@ -9,11 +9,18 @@ import { AuthProtected } from "./authProtected";
 
 function Home() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
+
+    const isRememberMe = localStorage.getItem("isRememberMe");
+    if (isRememberMe === "false")  {
+      localStorage.clear();
+      navigate('/login');
+    }
 
     window.addEventListener("resize", handleResize);
 

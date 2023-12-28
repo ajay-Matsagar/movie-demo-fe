@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true
 class DataService {
 
     constructor() {
-        this._baseUrl = "http://localhost:4000/api"
+        this._baseUrl = process.env.REACT_APP_API_URL+"/api"
     }
 
     get(relativeUrl, config = {}) {
