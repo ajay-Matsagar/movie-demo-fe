@@ -43,9 +43,20 @@ function* handleFetchMovies(action) {
     );
     yield put(setLoading({ isLoading: false }));
 
-    const tempResp = makeImagePreview(response.data);
-    const tempReplica = makeImagePreviewReplica(tempResp);
-    yield put(setMovies(tempReplica));
+    if (response?.data?.data?.length) {
+      const tempResp = makeImagePreview(response.data);
+      const tempReplica = makeImagePreviewReplica(tempResp);
+      yield put(setMovies(tempReplica));
+    } else {
+      yield put(
+        setMovies({
+          page: 1,
+          totalSize: 0,
+          currentPage: 1,
+          data: [],
+        })
+      );
+    }
   } catch (error) {
     yield put(
       setToaster({
@@ -56,6 +67,8 @@ function* handleFetchMovies(action) {
     );
     yield put(setLoading({ isLoading: false }));
     console.error("Error in handleFetchMovies saga:", error);
+  } finally {
+    yield put(setLoading({ isLoading: false }));
   }
 }
 
@@ -87,6 +100,8 @@ function* handleAddMovie(action) {
       })
     );
     console.error("Error in handleFetchMovies saga:", error);
+  } finally {
+    yield put(setLoading({ isLoading: false }));
   }
 }
 
@@ -116,6 +131,8 @@ function* handleDeleteMovie(action) {
     );
     yield put(setLoading({ isLoading: false }));
     console.error("Error in handleFetchMovies saga:", error);
+  } finally {
+    yield put(setLoading({ isLoading: false }));
   }
 }
 
@@ -147,6 +164,8 @@ function* handleEditMovie(action) {
       })
     );
     console.error("Error in handleFetchMovies saga:", error);
+  } finally {
+    yield put(setLoading({ isLoading: false }));
   }
 }
 

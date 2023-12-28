@@ -1,4 +1,4 @@
-export const makeImagePreview = (response) => {
+export const makeImagePreview = (response = {}) => {
   if (response?.data?.length > 0) {
     let temp = {
       ...response,
@@ -12,7 +12,7 @@ export const makeImagePreview = (response) => {
   return null;
 };
 
-export const makeImagePreviewReplica = (response) => {
+export const makeImagePreviewReplica = (response = {}) => {
   if (response?.data?.length > 0) {
     let temp = {
       ...response,

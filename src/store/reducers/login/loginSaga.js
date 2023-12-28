@@ -27,7 +27,10 @@ function* postLoginUserWithCredentialsAsync(action) {
         })
       );
       if (typeof action?.payload?.navigate === "function") {
-        localStorage.setItem("isRememberMe", action?.payload?.isRememberMe || false);
+        localStorage.setItem(
+          "isRememberMe",
+          action?.payload?.isRememberMe || false
+        );
         localStorage.setItem("token", response?.data?.accessToken);
         action?.payload?.navigate("/dashboard");
         yield put(setLoading({ isLoading: false }));
@@ -44,6 +47,7 @@ function* postLoginUserWithCredentialsAsync(action) {
       })
     );
   } finally {
+    yield put(setLoading({ isLoading: false }));
   }
 }
 
