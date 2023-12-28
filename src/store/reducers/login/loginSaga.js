@@ -2,7 +2,6 @@ import { all, put, takeLatest } from "redux-saga/effects";
 import { setLoading } from "../loader/LoaderSlice";
 import LoginService from "../../../services/LoginService";
 import { setToaster } from "../toaster/ToasterSlice";
-import { fetchMoviesList } from "../../moviesData/moviesSaga";
 
 export const { postLoginUserWithCredentials } = {
   postLoginUserWithCredentials: (payload) => {
@@ -20,7 +19,6 @@ function* postLoginUserWithCredentialsAsync(action) {
       action?.payload?.loginCreds
     );
     if (response?.data?.accessToken) {
-      yield put(fetchMoviesList());
       yield put(
         setToaster({
           open: true,
@@ -29,6 +27,7 @@ function* postLoginUserWithCredentialsAsync(action) {
         })
       );
       if (typeof action?.payload?.navigate === "function") {
+        localStorage.setItem("isRememberMe", action?.payload?.isRememberMe || false);
         localStorage.setItem("token", response?.data?.accessToken);
         action?.payload?.navigate("/dashboard");
         yield put(setLoading({ isLoading: false }));

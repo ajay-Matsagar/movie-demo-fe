@@ -193,6 +193,12 @@ input {
   background-color: $input-color;
 }
 
+.check-box-active {
+  .MuiSvgIcon-root {
+    color: $primary-color;
+  }
+}
+
 .d-flex {
   display: flex;
 }

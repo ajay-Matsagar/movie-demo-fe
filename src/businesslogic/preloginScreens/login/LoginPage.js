@@ -23,6 +23,7 @@ function LoginPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isRememberMe, setIsRememberMe] = useState(false);
 
   useEffect(() => {
     dispatch(stopLoadingProcess());
@@ -35,7 +36,13 @@ function LoginPage() {
   };
 
   const handleSubmit = () => {
-    if (!userName || !password) {
+    if (
+      !userName ||
+      !password ||
+      isError ||
+      (userName && !regexPatterns.email.test(userName)) ||
+      (password && !regexPatterns.passCode.test(password))
+    ) {
       setIsError(true);
       return null;
     }
@@ -44,6 +51,7 @@ function LoginPage() {
         navigate: navigate,
         isLoading: true,
         loginCreds: { email: userName, password: password },
+        isRememberMe: isRememberMe
       })
     );
   };
@@ -114,7 +122,11 @@ function LoginPage() {
               <Checkbox
                 value="allowExtraEmails"
                 color="primary"
-                className="d-flex paddin-top-24px"
+                className={`d-flex paddin-top-24px ${isRememberMe ? "check-box-active" : ""}`}
+                defaultChecked={isRememberMe}
+                onChange={() => {
+                  setIsRememberMe(!isRememberMe)
+                }}
               />
             }
             label={
